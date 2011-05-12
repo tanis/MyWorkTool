@@ -243,6 +243,8 @@ void CWriteToolDlg::InitData()
 	gbCheckIMEI = TRUE;
 	gbCheckBTAddr = FALSE;
 
+	strcpy(CfgMinBtAddress, MIN_BTADDR);
+
 	//init track file
 	CString info = "";
 	char timebuf[128] = {0};
@@ -825,16 +827,6 @@ void CWriteToolDlg::OnWrite()
 	if(m_PageSel == 0)	// OTP Pancel
 	{
 		// TODO: if not read from cfg ini, generate BT
-		if (!gSetParam.isOK())
-		{
-			char tmpBT[20];
-			strcpy(tmpBT, "0012");
-			strncat(tmpBT, gIMEI.szIMEI+6, 8);
-			tmpBT[4+GOZONE_IMEI_SIZE*2] = '\0';
-			strncpy(gBTAddress.szBlueToothAddr, tmpBT, GOZONE_BT_ADDRESS_SIZE*2);
-			gBTAddress.szBlueToothAddr[GOZONE_BT_ADDRESS_SIZE*2] = '\0';
-		}
-
 		if(gbCheckIMEI == TRUE)
 		{
 			InfoString += CString("\r\n录入IMEI:");
@@ -912,9 +904,19 @@ void CWriteToolDlg::OnWrite()
 
 		if ((gbCheckBTAddr == TRUE) && (bStatus == TRUE))
 		{
+			if (!gSetParam.isOK())
+			{
+				char tmpBT[20];
+				strcpy(tmpBT, "0012");
+				strncat(tmpBT, gIMEI.szIMEI+6, 8);
+				tmpBT[4+GOZONE_IMEI_SIZE*2] = '\0';
+				strncpy(gBTAddress.szBlueToothAddr, tmpBT, GOZONE_BT_ADDRESS_SIZE*2);
+				gBTAddress.szBlueToothAddr[GOZONE_BT_ADDRESS_SIZE*2] = '\0';
+			}
+
 			InfoString += CString("\r\n录入蓝牙地址:");
-			if (!IsGozoneBtAddr(offsetToBaseMEID,gBTAddress.szBlueToothAddr) ||
-				!IsBTAddrString(gBTAddress.szBlueToothAddr))
+			if (gSetParam.isOK() && (!IsGozoneBtAddr(offsetToBaseIMEI,gBTAddress.szBlueToothAddr) ||
+				!IsBTAddrString(gBTAddress.szBlueToothAddr)))
 			{
 				InfoString += CString("\r\n蓝牙地址无效，请检查!");
 				bStatus = FALSE;

@@ -386,8 +386,8 @@ BOOL IsGozoneIMEI(char* string,UINT* pOffsetToBaseIMEI)
 	sscanf(CfgMaxIMEI,"%I64x",&MaxIMEI);
 	sscanf(string,"%I64x",&GozoneIMEI);
 
-	if (GozoneIMEI<MinIMEI || GozoneIMEI>MaxIMEI)
-		return FALSE;
+/*	if (GozoneIMEI<MinIMEI || GozoneIMEI>MaxIMEI)
+		return FALSE;*/
 
 #if 0	//[zhangjj,maybe enable in crv,100707]
 	if ((GozoneIMEI-MinIMEI) >= (800*1024)) // 限制产能800K
@@ -403,7 +403,6 @@ BOOL IsGozoneIMEI(char* string,UINT* pOffsetToBaseIMEI)
 
 BOOL IsGozoneBtAddr(UINT OffsetToBaseBTAddr, char* string)
 {
-	/*
 	__int64 GozoneBTAddr = 0;
 	__int64 MinBtAddr = 0;
 	__int64 MaxBtAddr = 0;
@@ -413,11 +412,10 @@ BOOL IsGozoneBtAddr(UINT OffsetToBaseBTAddr, char* string)
 	
 	GozoneBTAddr = MinBtAddr+OffsetToBaseBTAddr;
 	
-	if (string==NULL || GozoneBTAddr<MinBtAddr || GozoneBTAddr>MaxBtAddr)
+/*	if (string==NULL || GozoneBTAddr<MinBtAddr || GozoneBTAddr>MaxBtAddr)
 		return FALSE;
-	
+*/	
 	sprintf(string,"%.12I64x",GozoneBTAddr);
-	*/
 	return TRUE;
 }
 
