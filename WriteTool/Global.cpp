@@ -44,13 +44,16 @@ char CfgMinMEID[CFGFILE_MEID_STRLEN+1] = {0};
 char CfgMaxMEID[CFGFILE_MEID_STRLEN+1] = {0};
 char CfgMinESN[CFGFILE_ESN_STRLEN+1] = {0};
 char CfgMaxESN[CFGFILE_ESN_STRLEN+1] = {0};
+char CfgMinIMEI[CFGFILE_IMEI_STRLEN+1] = {0};
+char CfgMaxIMEI[CFGFILE_IMEI_STRLEN+1] = {0};
 
 char CfgWriteMEID[CFGFILE_WRITE_FLAG+1] = {0};
 char CfgWriteBTAddr[CFGFILE_WRITE_FLAG+1] = {0};
 char CfgWriteESN[CFGFILE_WRITE_FLAG+1] = {0};
+char CfgWriteIMEI[CFGFILE_WRITE_FLAG+1] = {0};
 
 
-BOOL IsIMEIString(char* string)
+BOOL IsIMEIString(const char* string)
 {
 	UINT nLen = strlen(string);
 
@@ -349,7 +352,6 @@ BOOL SetServerParam()
 
 BOOL IsGozoneMEID(char* string,UINT* pOffsetToBaseMEID)
 {
-	/*
 	__int64 GozoneMEID = 0;
 	__int64 MinMEID = 0;
 	__int64 MaxMEID = 0;
@@ -370,10 +372,34 @@ BOOL IsGozoneMEID(char* string,UINT* pOffsetToBaseMEID)
 		return FALSE;
 	
 	*pOffsetToBaseMEID = (UINT)(GozoneMEID-MinMEID);
-	*/
 	return TRUE;
 }
 
+
+BOOL IsGozoneIMEI(char* string,UINT* pOffsetToBaseIMEI)
+{
+	__int64 GozoneIMEI = 0;
+	__int64 MinIMEI = 0;
+	__int64 MaxIMEI = 0;
+
+	sscanf(CfgMinIMEI,"%I64x",&MinIMEI);
+	sscanf(CfgMaxIMEI,"%I64x",&MaxIMEI);
+	sscanf(string,"%I64x",&GozoneIMEI);
+
+	if (GozoneIMEI<MinIMEI || GozoneIMEI>MaxIMEI)
+		return FALSE;
+
+#if 0	//[zhangjj,maybe enable in crv,100707]
+	if ((GozoneIMEI-MinIMEI) >= (800*1024)) // 限制产能800K
+		return FALSE;
+#endif
+		
+	if (pOffsetToBaseIMEI==NULL)
+		return FALSE;
+	
+	*pOffsetToBaseIMEI = (UINT)(GozoneIMEI-MinIMEI);
+	return TRUE;
+}
 
 BOOL IsGozoneBtAddr(UINT OffsetToBaseBTAddr, char* string)
 {

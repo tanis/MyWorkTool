@@ -129,7 +129,7 @@ BOOL CWriteToolDlg::OnInitDialog()
 	m_Dialog[2] = NULL;
 #endif
 
-	m_WriteToolTabCtrl.AddPage("MEID WRITE",m_Dialog[0],IDD_OTP_PANCEL);
+	m_WriteToolTabCtrl.AddPage("IMEI WRITE",m_Dialog[0],IDD_OTP_PANCEL);
 #ifndef FRV_RELEASE
 	m_WriteToolTabCtrl.AddPage("Flash Options",m_Dialog[1],IDD_FLASH_PANCEL);
 	m_WriteToolTabCtrl.AddPage("NV Options",m_Dialog[2],IDD_NV_PANCEL);
@@ -186,16 +186,6 @@ void CWriteToolDlg::InitData()
 {
 	char FullName[MAX_PATH+1] = {0};
 
-#if 0	//[zhangjj,del for crv,100707]
-	UINT32 ItemBufLen = 57;
-	char* pItemBuf = "SYSTEM\\CurrentControlSet\\Enum\\USB\\Vid_1614&Pid_040D&Mi_01";
-
-	if (InitDeviceItem(pItemBuf, ItemBufLen) == FALSE)
-	{
-		MessageBox("Init device list failed!", NULL,MB_ICONERROR);
-	}
-
-#else
 	//Load Library
 	m_hLibraryListComPort = LoadLibrary("ListComPort.dll");
 	if(m_hLibraryListComPort==NULL)
@@ -218,7 +208,7 @@ void CWriteToolDlg::InitData()
 		char* pItemBuf = (char*)ReadDLFile("DeviceList.dat", &ItemBufLen);
 #else
 		UINT32 ItemBufLen = 57;
-		char* pItemBuf = "SYSTEM\\CurrentControlSet\\Enum\\USB\\Vid_05C6&Pid_5A47&Mi_01	SYSTEM\\CurrentControlSet\\Enum\\USB\\Vid_05C6&Pid_5747&Mi_01";
+		char* pItemBuf = "SYSTEM\\CurrentControlSet\\Enum\\USB\\VID_05C6&PID_5747&MI_00";
 #endif
 		if (InitDeviceItemProc(pItemBuf, ItemBufLen) == FALSE)
 		{
@@ -233,66 +223,26 @@ void CWriteToolDlg::InitData()
 			MessageBox("Load Process \"GetValidComPort\" failed!",NULL,MB_ICONERROR);
 		}
 	}
-#if 0
-	ghLibraryDllParam = LoadLibrary("DllParam.dll");
-	if(ghLibraryDllParam == NULL)
-	{
-		MessageBox("Load DllParam.dll failed!",NULL,MB_ICONERROR);
-	}
-#endif
-#endif
 	//Read the data from cfg
-#if 0	// zhangjj no cfg file 100312
-	if(GetConfigFileName(FullName) == TRUE)
-	{
-		GetPrivateProfileString("ServerParam","ProjectName","UnknownName",gProjectName,GOZONE_PRJECT_NAME_SIZE,FullName);
-		GetPrivateProfileString("ServerParam","IPAddr","127.0.0.1",gIPAddress,GOZONE_IP_ADDRESS_SIZE,FullName);
-	}
-#else
+
 	strcpy(gProjectName,"UnknownName");
 	strcpy(gIPAddress,"255.255.255.1");
-#endif
 
 #ifdef FRV_RELEASE
-#if 1	//[zhangjj,for CP605A,100708]
-/*
-CP611(E998)写ESN工具，号段0AF80F00至0AF80F30
 
-*/
 
-	char MIN_ESN[CFGFILE_ESN_STRLEN+1]="0AF80155";
-	char MAX_ESN[CFGFILE_ESN_STRLEN+1]="0AF80159";
+	char MIN_IMEI[CFGFILE_IMEI_STRLEN+1]="35355103001401";
+	char MAX_IMEI[CFGFILE_IMEI_STRLEN+1]="35355103099999";
 	char MIN_BTADDR[CFGFILE_BT_ADDR_STRLEN+1] = "";
 	if (gSetParam.isOK())
-		gSetParam.getCfgParam(MIN_ESN, CFGFILE_ESN_STRLEN,  MIN_BTADDR, CFGFILE_BT_ADDR_STRLEN);
+		gSetParam.getCfgParam(MIN_IMEI, CFGFILE_IMEI_STRLEN,  MIN_BTADDR, CFGFILE_BT_ADDR_STRLEN);
 
-	strcpy(CfgMinESN,MIN_ESN);
-	strcpy(CfgMaxESN,MAX_ESN);
+	strcpy(CfgMinIMEI,MIN_IMEI);
+	strcpy(CfgMaxIMEI,MAX_IMEI);
 
-	gbCheckESN = TRUE;
-	gbCheckBTAddr = TRUE; // if no bt
-#else
-	//Read the data from cfg
-	if(GetFileFullName(FullName,WRITE_TOOL_CONFIG_FILE) == TRUE)
-	{		
-		GetPrivateProfileString("ServerParam","MIN_BT_ADDRESS","0",CfgMinBtAddress,CFGFILE_BT_ADDR_STRLEN+1,FullName);
-		GetPrivateProfileString("ServerParam","MAX_BT_ADDRESS","0",CfgMaxBtAddress,CFGFILE_BT_ADDR_STRLEN+1,FullName);
-		GetPrivateProfileString("ServerParam","MIN_MEID","0",CfgMinMEID,CFGFILE_MEID_STRLEN+1,FullName);
-		GetPrivateProfileString("ServerParam","MAX_MEID","0",CfgMaxMEID,CFGFILE_MEID_STRLEN+1,FullName);
-		GetPrivateProfileString("ServerParam","OP_WRITE_MEID","0",CfgWriteMEID,CFGFILE_WRITE_FLAG+1,FullName);
-		GetPrivateProfileString("ServerParam","OP_WRITE_BTADDR","0",CfgWriteBTAddr,CFGFILE_WRITE_FLAG+1,FullName);
-	}
-	else
-	{
-		MessageBox("读取配置文件失败!", NULL,MB_ICONERROR);
-		DestroyWindow();
-	}
-	
-	if (CfgWriteMEID[0]=='1')
-		gbCheckMEID = TRUE;
-	if (CfgWriteBTAddr[0]=='1')
-		gbCheckBTAddr = TRUE;
-#endif
+	gbCheckIMEI = TRUE;
+	gbCheckBTAddr = FALSE;
+
 	//init track file
 	CString info = "";
 	char timebuf[128] = {0};
@@ -432,7 +382,7 @@ void CWriteToolDlg::OnTimer(UINT nIDEvent)
 				gComPortInfo.bIsConnect = TRUE;
 				m_HandsetStatus.Format("Gozone phone(COM%d) connected!",gComPortInfo.ComID);
 #ifdef FRV_RELEASE
-				((COTPPancel*)m_Dialog[0])->m_CMEID.SetFocus();
+				((COTPPancel*)m_Dialog[0])->m_CIMEI.SetFocus();
 #endif
 				m_ComboBox.ShowWindow(FALSE);
 				UpdateData(FALSE);
@@ -867,38 +817,58 @@ void CWriteToolDlg::OnWrite()
 	CString tmpString="";
 	BOOL bStatus = TRUE;
 	UINT offsetToBaseMEID = 0;
+	UINT offsetToBaseIMEI = 0;
 	
 	ReadWriteComReq();
 
 	RefreshMainDlgMsgBox("*****************************************************");
 	if(m_PageSel == 0)	// OTP Pancel
 	{
-#ifndef FRV_RELEASE
+		// TODO: if not read from cfg ini, generate BT
+		if (!gSetParam.isOK())
+		{
+			char tmpBT[20];
+			strcpy(tmpBT, "0012");
+			strncat(tmpBT, gIMEI.szIMEI+6, 8);
+			tmpBT[4+GOZONE_IMEI_SIZE*2] = '\0';
+			strncpy(gBTAddress.szBlueToothAddr, tmpBT, GOZONE_BT_ADDRESS_SIZE*2);
+			gBTAddress.szBlueToothAddr[GOZONE_BT_ADDRESS_SIZE*2] = '\0';
+		}
+
 		if(gbCheckIMEI == TRUE)
 		{
-			InfoString += CString("\r\nWrite IMEI:");
-			if(!IsIMEIString(gIMEI.szIMEI))
+			InfoString += CString("\r\n录入IMEI:");
+			tmpString.Format("%s", gIMEI.szIMEI);
+			InfoString += tmpString;
+			if(!IsIMEIString(gIMEI.szIMEI) || !IsGozoneIMEI(gIMEI.szIMEI, &offsetToBaseIMEI))
 			{
-				InfoString += CString("\r\nIMEI is invalid,Please check it!");
+				InfoString += CString("\r\nIMEI无效，请检查!");
+				bStatus = FALSE;
+				MessageBox("IMEI无效!",NULL,MB_ICONERROR);
 			}
 			else
 			{
-				if(gbCheckAutoIncIMEI == TRUE)
-				{
-					IMEIInc(gIMEI.szIMEI);
-				}
+			}
+
+			if (bStatus == TRUE)
+			{
 				if(WriteIMEI(gIMEI) == TRUE)
 				{
-					InfoString += CString("Success!");
+					InfoString += CString(" 成功!");
+					tmpString += "\t";
+					AddToTrackFile(tmpString);
 				}
 				else
 				{
-					InfoString += CString("Failed!");
+					InfoString += CString(" 失败!");
+					bStatus = FALSE;
+					MessageBox("录入IMEI失败!",NULL,MB_ICONERROR);
 				}
 			}
+
 			InfoString += CString("\r\n\r\n*****************************************************");
 		}
-#endif
+
 		if ((gbCheckMEID == TRUE) && (bStatus == TRUE))
 		{
 			InfoString += CString("\r\n录入MEID:");
@@ -940,16 +910,6 @@ void CWriteToolDlg::OnWrite()
 			InfoString += CString("\r\n\r\n*****************************************************");
 		}
 
-		// TODO: if not read from cfg ini, generate BT
-		if (!gSetParam.isOK())
-		{
-			char tmpBT[20];
-			strcpy(tmpBT, "0012");
-			strncat(tmpBT, gESN.szESN, GOZONE_ESN_SIZE*2);
-			tmpBT[4+GOZONE_ESN_SIZE*2] = '\0';
-			strncpy(gBTAddress.szBlueToothAddr, tmpBT, GOZONE_BT_ADDRESS_SIZE*2);
-			gBTAddress.szBlueToothAddr[GOZONE_BT_ADDRESS_SIZE*2] = '\0';
-		}
 		if ((gbCheckBTAddr == TRUE) && (bStatus == TRUE))
 		{
 			InfoString += CString("\r\n录入蓝牙地址:");

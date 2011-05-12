@@ -47,6 +47,7 @@ void COTPPancel::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COTPPancel)
+	DDX_Control(pDX, IDC_EDIT_IMEI, m_CIMEI);
 	DDX_Control(pDX, IDC_EDIT_ESN, m_CESN);
 	DDX_Control(pDX, IDC_EDIT_MEID, m_CMEID);
 	DDX_Text(pDX, IDC_EDIT_BT_ADDRESS, m_BTAddress);
@@ -102,10 +103,11 @@ BEGIN_MESSAGE_MAP(COTPPancel, CDialog)
 	ON_EN_CHANGE(IDC_EDIT_MEID, OnChangeEditMeid)
 	ON_BN_CLICKED(IDC_CHECK_MEID, OnCheckMeid)
 	ON_BN_CLICKED(IDC_ENTER_MEID, OnEnterMeid)
+	ON_BN_CLICKED(IDC_ENTER_ESN, OnEnterEsn)
 	ON_WM_KILLFOCUS()
 	ON_WM_PAINT()
 	ON_WM_TIMER()
-	ON_BN_CLICKED(IDC_ENTER_ESN, OnEnterEsn)
+	ON_BN_CLICKED(IDC_ENTER_IMEI, OnEnterImei)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(DM_GETDEFID, OnGetDefID)
 END_MESSAGE_MAP()
@@ -350,7 +352,8 @@ void COTPPancel::RefreshPancel()
 	m_DCK = CString(gDCK);
 	m_ESN = CString(gESN.szESN);
 	m_MEID = CString(gMEID.szMEID);
-	m_CMEID.SetFocus();
+	//m_CMEID.SetFocus();
+	m_CIMEI.SetFocus();
 #ifndef FRV_RELEASE
 	UpdateData(FALSE);
 #endif
@@ -549,7 +552,8 @@ void COTPPancel::OnKillFocus(CWnd *pNewWnd)
 	
 	// TODO: Add your message handler code here
 	//m_CMEID.SetFocus();
-	m_CESN.SetFocus();
+	//m_CESN.SetFocus();
+	m_CIMEI.SetFocus();
 }
 
 void COTPPancel::OnPaint()
@@ -581,7 +585,8 @@ void COTPPancel::OnPaint()
 LRESULT COTPPancel::OnGetDefID(WPARAM wp, LPARAM lp)
 {
 	//return MAKELONG(IDC_ENTER_MEID,DC_HASDEFID);
-	return MAKELONG(IDC_ENTER_ESN,DC_HASDEFID);
+	//return MAKELONG(IDC_ENTER_ESN,DC_HASDEFID);
+	return MAKELONG(IDC_ENTER_IMEI,DC_HASDEFID);
 }
 
 static char lastESN[GOZONE_ESN_SIZE*2+1] = "";
@@ -627,6 +632,53 @@ void COTPPancel::OnEnterEsn()
 		else
 		{
 			RefreshMainDlgMsgBox("请检查ESN是否为8位！");
+		}
+	}
+}
+
+static char lastIMEI[GOZONE_IMEI_SIZE*2+1] = "";
+
+void COTPPancel::OnEnterImei() 
+{
+	// TODO: Add your control notification handler code here
+	RefreshMainDlgMsgBox("");	// clear main dialog msg box
+	UpdateData(TRUE);
+	if(m_IMEI.GetLength()==14 && allowEnter==TRUE)
+	{
+		//允许客户反复快速多次写
+		//if (0 == strcmp(lastMEID,(LPCTSTR)m_MEID))
+		//{
+		//	m_MEID.Empty();
+		//	UpdateData(FALSE);
+		//	RefreshMainDlgMsgBox("MEID和上一台重号！");
+		//	MessageBox("MEID和上一台重号！",NULL,MB_ICONERROR);
+		//}
+		//else
+		//{
+		KillTimer(m_DelayEnterTimer);
+		
+		strcpy(lastIMEI,(LPCTSTR)m_IMEI);
+		strcpy(gIMEI.szIMEI,(LPCTSTR)m_IMEI);
+		NotifyMainDlgOnWrite();
+		
+		m_IMEI.Empty();
+		UpdateData(FALSE);
+		
+		//allowEnter = FALSE;	//允许客户反复快速多次写
+		m_DelayEnterTimer = SetTimer(1012, 3000, NULL);
+		//}
+	}
+	else
+	{
+		m_IMEI.Empty();
+		UpdateData(FALSE);
+		if (allowEnter == FALSE)
+		{
+			RefreshMainDlgMsgBox("系统忙，请重试！");
+		}
+		else
+		{
+			RefreshMainDlgMsgBox("请检查IMEI是否为14位！");
 		}
 	}
 }

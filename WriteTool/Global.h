@@ -14,6 +14,7 @@
 #define CFGFILE_MEID_STRLEN		(GOZONE_MEID_SIZE-1)*2
 #define CFGFILE_WRITE_FLAG		1
 #define CFGFILE_ESN_STRLEN		GOZONE_ESN_SIZE*2
+#define CFGFILE_IMEI_STRLEN		GOZONE_IMEI_SIZE*2
 #endif
 
 typedef struct tagComInfo
@@ -39,6 +40,9 @@ extern char CfgWriteBTAddr[CFGFILE_WRITE_FLAG+1];
 extern char CfgMinESN[CFGFILE_ESN_STRLEN+1];
 extern char CfgMaxESN[CFGFILE_ESN_STRLEN+1];
 extern char CfgWriteESN[CFGFILE_WRITE_FLAG+1];
+extern char CfgMinIMEI[CFGFILE_IMEI_STRLEN+1];
+extern char CfgMaxIMEI[CFGFILE_IMEI_STRLEN+1];
+extern char CfgWriteIMEI[CFGFILE_WRITE_FLAG+1];
 #endif
 
 //Param of Handset
@@ -73,7 +77,7 @@ extern BOOL gbCheckGeneralAdjust;
 
 
 
-extern BOOL IsIMEIString(char* string);		//判断是否IMEI号
+extern BOOL IsIMEIString(const char* string);		//判断是否IMEI号
 extern BOOL IsBTAddrString(const char* string);	//判断是否蓝牙地址
 extern BOOL IsESNString(const char* string);		//判断是否ESN号
 extern BOOL IsMEIDString(const char* string);		//判断是否MEID号
@@ -84,6 +88,9 @@ extern void EnableComboBox(BOOL bEnable);	//使能ComboBox控件
 extern void MinimizeMainDialog();	//最小化窗口
 extern void NotifyMainDlgOnWrite();	//主窗口调用write
 extern BOOL IsGozoneMEID(char* string,UINT* pOffsetToBaseMEID);	//判断输入的MEID是否属于配置文件中指定的范围
+// 判断范围，同时，处理自动生成蓝牙地址的offset
+extern BOOL IsGozoneIMEI(char* string,UINT* pOffsetToBaseIMEI);
+
 extern BOOL IsGozoneBtAddr(UINT OffsetToBaseBTAddr, char* string);	//判断输入的BTAddr是否属于配置文件中指定的范围
 extern BOOL IsGozoneEsn(char* string,UINT* pOffsetToBaseEsn);	//判断输入的ESN是否属于配置文件中指定的范围
 extern BOOL IsStrInTrackFile(CString Str);	//判断Str是否存在Track文件中

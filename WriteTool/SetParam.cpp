@@ -39,13 +39,13 @@ CSetParam::CSetParam()
 	bOKParser = FALSE;
 	if (GetFileFullName(file_FullName, "hwid_cfg.ini"))
 	{
-		if ( 0< GetPrivateProfileString("Product","ESN","", hwid_min.GetBuffer(MAX_PATH),MAX_PATH, file_FullName)
+		if ( 0< GetPrivateProfileString("Product","IMEI","", hwid_min.GetBuffer(MAX_PATH),MAX_PATH, file_FullName)
 			&& 0< GetPrivateProfileString("Product","BT_ADDR","", bt_min.GetBuffer(MAX_PATH),MAX_PATH, file_FullName))
 		{
 			// check
 			const char *hwid = hwid_min;
 			const char *bt = bt_min;
-			if (IsESNString(hwid)
+			if (IsIMEIString(hwid)
 				&& IsBTAddrString(bt))
 			{
 				bOKParser = TRUE;
@@ -59,7 +59,7 @@ BOOL CSetParam::setCfgParam(CString a_hwid, CString a_bt)
 {
 	const char *hwid = a_hwid;
 	const char* bt = a_bt;
-	if (IsESNString(hwid)
+	if (IsIMEIString(hwid)
 		&& IsBTAddrString(bt))
 	{
 		hwid_min = a_hwid;

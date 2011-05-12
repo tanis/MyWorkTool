@@ -117,6 +117,7 @@
 #define IDC_HWID_EDIT                   1075
 #define IDC_PLMN7_3                     1076
 #define IDC_BT_ADDR_EDIT                1076
+#define IDC_ENTER_IMEI                  1076
 #define IDC_PLMN8_1                     1077
 #define IDC_PLMN8_2                     1078
 #define IDC_PLMN8_3                     1079
@@ -238,7 +239,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        147
 #define _APS_NEXT_COMMAND_VALUE         32774
-#define _APS_NEXT_CONTROL_VALUE         1076
+#define _APS_NEXT_CONTROL_VALUE         1077
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
