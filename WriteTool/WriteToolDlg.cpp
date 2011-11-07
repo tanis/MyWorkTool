@@ -241,7 +241,7 @@ void CWriteToolDlg::InitData()
 	strcpy(CfgMaxIMEI,MAX_IMEI);
 
 	gbCheckIMEI = TRUE;
-	gbCheckBTAddr = FALSE;
+	gbCheckBTAddr = TRUE;
 
 	strcpy(CfgMinBtAddress, MIN_BTADDR);
 
