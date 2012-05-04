@@ -22,15 +22,15 @@ Class10=CWriteToolDlg
 Class11=CWriteToolTabCtrl
 
 ResourceCount=10
-Resource1=IDD_VIEW_PUBLIC_KEY
-Resource2=IDD_FLASH_PANCEL
-Resource3=IDD_COPYRIGHT
-Resource4=IDD_OTP_PANCEL
-Resource5=IDD_WRITETOOL_DIALOG
-Resource6=IDD_SET_DIALOG
-Resource7=IDD_NV_PANCEL
-Resource8=IDD_VIEW_PLMNLIST
-Resource9=IDD_SERVER_SETTING
+Resource1=IDD_NV_PANCEL
+Resource2=IDD_VIEW_PLMNLIST
+Resource3=IDD_SET_DIALOG
+Resource4=IDD_SERVER_SETTING
+Resource5=IDD_VIEW_PUBLIC_KEY
+Resource6=IDD_OTP_PANCEL
+Resource7=IDD_COPYRIGHT
+Resource8=IDD_FLASH_PANCEL
+Resource9=IDD_WRITETOOL_DIALOG
 Resource10=IDR_WRITETOOL_MENU
 
 [CLS:CCopyRight]
@@ -56,7 +56,7 @@ Type=0
 BaseClass=CDialog
 HeaderFile=OTPPancel.h
 ImplementationFile=OTPPancel.cpp
-LastObject=IDC_CHECK_AUTO_GEN
+LastObject=IDC_EDIT_IMEI2
 Filter=D
 VirtualFilter=dWC
 

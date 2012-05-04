@@ -55,7 +55,7 @@ void COTPPancel::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_BT_ADDRESS, m_BTAddress);
 	DDV_MaxChars(pDX, m_BTAddress, 12);
 	DDX_Text(pDX, IDC_EDIT_IMEI, m_IMEI);
-	DDV_MaxChars(pDX, m_IMEI, 14);
+	DDV_MaxChars(pDX, m_IMEI, 15);
 	DDX_Text(pDX, IDC_EDIT_PUBLIC_KEY, m_PublicKeyFileName);
 	DDX_Text(pDX, IDC_EDIT_DCK, m_DCK);
 	DDV_MaxChars(pDX, m_DCK, 16);
@@ -75,7 +75,7 @@ void COTPPancel::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_CHECK_AUTO_INC_MEID, m_CheckAutoIncMEID);
 	DDX_Check(pDX, IDC_CHECK_MEID, m_CheckMEID);
 	DDX_Text(pDX, IDC_EDIT_IMEI2, m_IMEI2);
-	DDV_MaxChars(pDX, m_IMEI2, 14);
+	DDV_MaxChars(pDX, m_IMEI2, 15);
 	//}}AFX_DATA_MAP
 }
 
@@ -130,8 +130,10 @@ void COTPPancel::OnChangeEditImei()
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
 	strcpy(gIMEI.szIMEI,m_IMEI.GetBuffer(0));
-	if (14 == m_IMEI.GetLength())
+	if (15 == m_IMEI.GetLength())
 	{
+		strncpy(gIMEI.szIMEI,m_IMEI.GetBuffer(0), 14);
+		gIMEI.szIMEI[14]='\0';
 		GetNextDlgTabItem(GetFocus())->SetFocus();
 	}
 }
@@ -653,7 +655,7 @@ void COTPPancel::OnEnterImei()
 	// TODO: Add your control notification handler code here
 	RefreshMainDlgMsgBox("");	// clear main dialog msg box
 	UpdateData(TRUE);
-	if(m_IMEI.GetLength()==14 && m_IMEI2.GetLength()==14  && allowEnter==TRUE)
+	if(m_IMEI.GetLength()==15 && m_IMEI2.GetLength()==15  && allowEnter==TRUE)
 	{
 		//允许客户反复快速多次写
 		//if (0 == strcmp(lastMEID,(LPCTSTR)m_MEID))
@@ -667,9 +669,12 @@ void COTPPancel::OnEnterImei()
 		//{
 		KillTimer(m_DelayEnterTimer);
 		
-		strcpy(lastIMEI,(LPCTSTR)m_IMEI);
-		strcpy(gIMEI.szIMEI,(LPCTSTR)m_IMEI);
-		strcpy(gIMEI2.szIMEI2,(LPCTSTR)m_IMEI2);
+		strncpy(gIMEI.szIMEI,(LPCTSTR)m_IMEI, 14);
+		gIMEI.szIMEI[14]='\0';
+		strncpy(gIMEI2.szIMEI2,(LPCTSTR)m_IMEI2, 14);
+		gIMEI2.szIMEI2[14]='\0';
+		strncpy(lastIMEI,(LPCTSTR)m_IMEI2, 14);
+		lastIMEI[14]='\0';
 		NotifyMainDlgOnWrite();
 		
 		m_IMEI.Empty();
@@ -706,8 +711,10 @@ void COTPPancel::OnChangeEditImei2()
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
 	strcpy(gIMEI2.szIMEI2,m_IMEI2.GetBuffer(0));
-	if (14 == m_IMEI2.GetLength())
+	if (15 == m_IMEI2.GetLength())
 	{
+		strncpy(gIMEI2.szIMEI2,m_IMEI2.GetBuffer(0), 14);
+		gIMEI2.szIMEI2[14]='\0';
 		GetNextDlgTabItem(GetFocus())->SetFocus();
 	}
 }

@@ -436,9 +436,9 @@ CAPTION "About"
 FONT 10, "System"
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,104,62,40,12
-    LTEXT           "GDWToolFRV    v0,0,0,4",IDC_STATIC,9,64,88,9
+    LTEXT           "GDWToolFRV    v1,0,0,0",IDC_STATIC,9,64,88,9
     CONTROL         144,IDC_STATIC,"Static",SS_BITMAP,3,4,148,54
-    LTEXT           "版权所有 Gozone 2010",IDC_STATIC,9,79,133,8
+    LTEXT           "版权所有 Gozone 2011",IDC_STATIC,9,79,133,8
 END
 
 IDD_SET_DIALOG DIALOG DISCARDABLE  0, 0, 187, 94
@@ -463,8 +463,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,0,0,4
- PRODUCTVERSION 0,0,0,4
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -482,14 +482,14 @@ BEGIN
             VALUE "Comments", "\0"
             VALUE "CompanyName", "GoZone Mobile CO., LTD.\0"
             VALUE "FileDescription", "GDWToolFRV Microsoft 基础类应用程序\0"
-            VALUE "FileVersion", "0, 0, 0, 4\0"
+            VALUE "FileVersion", "1, 0, 0, 0\0"
             VALUE "InternalName", "GDWToolFRV\0"
-            VALUE "LegalCopyright", "版权所有 (GoZone) 2010\0"
+            VALUE "LegalCopyright", "版权所有 (GoZone) 2011\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "GDWToolFRV.EXE\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "GDWToolFRV 应用程序\0"
-            VALUE "ProductVersion", "0, 0, 0, 4\0"
+            VALUE "ProductVersion", "1, 0, 0, 0\0"
             VALUE "SpecialBuild", "\0"
         END
     END
