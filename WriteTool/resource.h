@@ -53,6 +53,7 @@
 #define IDC_TURNON_TEST_MENU            1040
 #define IDC_CHECK_MEID                  1040
 #define IDC_TURNOFF_TEST_MENU           1041
+#define IDC_EDIT_IMEI2                  1041
 #define IDC_QUERY_VERSION               1042
 #define IDC_CHECK_PLMNLIST              1043
 #define IDC_CHECK_SIMLOCK_INFO          1044

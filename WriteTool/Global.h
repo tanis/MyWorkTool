@@ -47,6 +47,7 @@ extern char CfgWriteIMEI[CFGFILE_WRITE_FLAG+1];
 
 //Param of Handset
 extern OTP_IMEI				gIMEI;
+extern OTP_IMEI2				gIMEI2;
 extern OTP_BlueToothAddr	gBTAddress;
 extern OTP_PublicKey		gPublicKey;
 extern OTP_Plmn				gPlmnList;

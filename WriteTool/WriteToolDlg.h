@@ -57,6 +57,7 @@ protected:
 	void ClearIMEICheckBit(char * pIMEI);
 	BOOL ReadIMEI(OTP_IMEI* pIMEI);
 	BOOL WriteIMEI(OTP_IMEI IMEI);
+	BOOL WriteIMEI2(OTP_IMEI2 IMEI);
 	//BT Address
 	BOOL ReadBTAddress(OTP_BlueToothAddr* pBTAddr);
 	BOOL WriteBTAddress(OTP_BlueToothAddr BTAddr);

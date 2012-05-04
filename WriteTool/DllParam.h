@@ -37,6 +37,12 @@ typedef struct tagOTP_IMEI
 	char        szIMEI[GOZONE_IMEI_SIZE*2+1];
 }OTP_IMEI;
 
+typedef struct tagOTP_IMEI2
+{
+	CommonInfo  structCommonInfo;
+	char		szIMEI2[GOZONE_IMEI_SIZE*2+1];
+}OTP_IMEI2;
+
 typedef struct tagOTP_BlueToothAddress
 {
 	CommonInfo  structCommonInfo;
@@ -136,6 +142,8 @@ BOOL Read_OTP_Version(UINT nSerialPort, OTP_Version *pOTPVersion);
 BOOL Write_OTP_Version(UINT nSerialPort, OTP_Version *pOTPVersion);
 BOOL Read_OTP_IMEI(UINT nSerialPort, OTP_IMEI *pOTPImei);
 BOOL Write_OTP_IMEI(UINT nSerialPort, OTP_IMEI *pOTPImei);
+BOOL Write_OTP_IMEI2(UINT nSerialPort, OTP_IMEI2 *pOTPImei);
+
 BOOL Read_OTP_BlueToothAddr(UINT nSerialPort, OTP_BlueToothAddr *pOTPBluetoothaddr);
 BOOL Write_OTP_BlueToothAddr(UINT nSerialPort, OTP_BlueToothAddr *pOTPBluetoothaddr);
 BOOL Read_OTP_HASH(UINT nSerialPort, OTP_Hash *pOTPHash);

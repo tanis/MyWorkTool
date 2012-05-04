@@ -19,6 +19,7 @@ public:
 // Dialog Data
 	//{{AFX_DATA(COTPPancel)
 	enum { IDD = IDD_OTP_PANCEL };
+	CEdit	m_CIMEI2;
 	CEdit	m_CIMEI;
 	CEdit	m_CESN;
 	CEdit	m_CMEID;
@@ -39,6 +40,7 @@ public:
 	CString	m_MEID;
 	BOOL	m_CheckAutoIncMEID;
 	BOOL	m_CheckMEID;
+	CString	m_IMEI2;
 	//}}AFX_DATA
 
 // Overrides
@@ -86,6 +88,7 @@ protected:
 	afx_msg void OnEnterMeid();
 	afx_msg void OnEnterEsn();
 	afx_msg void OnEnterImei();
+	afx_msg void OnChangeEditImei2();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

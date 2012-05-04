@@ -483,6 +483,13 @@ BOOL CWriteToolDlg::WriteIMEI(OTP_IMEI IMEI)
 	return Write_OTP_IMEI(gComPortInfo.ComID,&IMEI);
 }
 
+//Write IMEI2
+BOOL CWriteToolDlg::WriteIMEI2(OTP_IMEI2 IMEI)
+{
+	SetIMEICheckBit(IMEI.szIMEI2);
+	return Write_OTP_IMEI2(gComPortInfo.ComID,&IMEI);
+}
+
 //给IMEI号增加校验位,写入到第15位上
 //See TS 0216.720
 void CWriteToolDlg::SetIMEICheckBit(char * pIMEI)
@@ -838,9 +845,6 @@ void CWriteToolDlg::OnWrite()
 				bStatus = FALSE;
 				MessageBox("IMEI无效!",NULL,MB_ICONERROR);
 			}
-			else
-			{
-			}
 
 			if (bStatus == TRUE)
 			{
@@ -857,8 +861,36 @@ void CWriteToolDlg::OnWrite()
 					MessageBox("录入IMEI失败!",NULL,MB_ICONERROR);
 				}
 			}
-
 			InfoString += CString("\r\n\r\n*****************************************************");
+
+			
+			InfoString += CString("\r\n录入IMEI2:");
+			tmpString.Format("%s", gIMEI2.szIMEI2);
+			InfoString += tmpString;
+			if(!IsIMEIString(gIMEI2.szIMEI2))
+			{
+				InfoString += CString("\r\nIMEI 2 无效，请检查!");
+				bStatus = FALSE;
+				MessageBox("IMEI 2 无效!",NULL,MB_ICONERROR);
+			}
+
+			if (bStatus == TRUE)
+			{
+				if(WriteIMEI2(gIMEI2) == TRUE)
+				{
+					InfoString += CString(" 成功!");
+					tmpString += "\t";
+					AddToTrackFile(tmpString);
+				}
+				else
+				{
+					InfoString += CString(" 失败!");
+					bStatus = FALSE;
+					MessageBox("录入 IMEI 2 失败!",NULL,MB_ICONERROR);
+				}
+			}
+			InfoString += CString("\r\n\r\n*****************************************************");
+
 		}
 
 		if ((gbCheckMEID == TRUE) && (bStatus == TRUE))

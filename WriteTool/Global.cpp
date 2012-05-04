@@ -8,6 +8,7 @@ char gIPAddress[GOZONE_IP_ADDRESS_SIZE]		= "";
 
 //Param of Handset
 OTP_IMEI			gIMEI = {0};
+OTP_IMEI2			gIMEI2 = {0};
 OTP_BlueToothAddr	gBTAddress = {0};
 OTP_PublicKey		gPublicKey = {0};
 OTP_Plmn			gPlmnList = {0};

@@ -1029,6 +1029,38 @@ BOOL CSetNVParam::Write_OTP_IMEI(OTP_IMEI *pOTPImei)
 }
 
 /*
+ *	通过OTP向手机中写入IMEI
+ */
+BOOL CSetNVParam::Write_OTP_IMEI2(OTP_IMEI2 *pOTPImei)
+{
+    char szText[32]			= { 0 };
+	char szDigitText[32]	= { 0 };
+	char szTempText[127+1]	= { 0 };
+
+    sprintf(szText, "80a%s", pOTPImei->szIMEI2);
+
+    for (int i=GOZONE_IMEI_SIZE-1; i>=0; i--)
+    {
+        sprintf(szDigitText, "%c%c", szText[2 * i + 1], szText[2 * i]);
+        TRACE("IMEI[%d]: %s\n", i, szDigitText);
+
+		szTempText[i] = (char)strtoul(szDigitText, NULL, 16);
+    }
+
+	if(WriteFlashQuest(szTempText,GOZONE_IMEI_SIZE) == FALSE)
+	{
+		return FALSE;
+	}
+
+	BOOL bResult = Write_Data_By_OTP(GOZONE_IMEI2_WRITE, 
+									&pOTPImei->structCommonInfo,
+									szTempText);
+
+	return bResult;
+}
+
+
+/*
  *	通过OTP向手机中读取蓝牙
  */
 BOOL CSetNVParam::Read_OTP_BlueToothAddr(OTP_BlueToothAddr *pOTPBluetoothaddr)

@@ -39,6 +39,7 @@ COTPPancel::COTPPancel(CWnd* pParent /*=NULL*/)
 	m_MEID = _T("");
 	m_CheckAutoIncMEID = FALSE;
 	m_CheckMEID = FALSE;
+	m_IMEI2 = _T("");
 	//}}AFX_DATA_INIT
 }
 
@@ -47,6 +48,7 @@ void COTPPancel::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COTPPancel)
+	DDX_Control(pDX, IDC_EDIT_IMEI2, m_CIMEI2);
 	DDX_Control(pDX, IDC_EDIT_IMEI, m_CIMEI);
 	DDX_Control(pDX, IDC_EDIT_ESN, m_CESN);
 	DDX_Control(pDX, IDC_EDIT_MEID, m_CMEID);
@@ -72,6 +74,8 @@ void COTPPancel::DoDataExchange(CDataExchange* pDX)
 	DDV_MaxChars(pDX, m_MEID, 14);
 	DDX_Check(pDX, IDC_CHECK_AUTO_INC_MEID, m_CheckAutoIncMEID);
 	DDX_Check(pDX, IDC_CHECK_MEID, m_CheckMEID);
+	DDX_Text(pDX, IDC_EDIT_IMEI2, m_IMEI2);
+	DDV_MaxChars(pDX, m_IMEI2, 14);
 	//}}AFX_DATA_MAP
 }
 
@@ -104,10 +108,11 @@ BEGIN_MESSAGE_MAP(COTPPancel, CDialog)
 	ON_BN_CLICKED(IDC_CHECK_MEID, OnCheckMeid)
 	ON_BN_CLICKED(IDC_ENTER_MEID, OnEnterMeid)
 	ON_BN_CLICKED(IDC_ENTER_ESN, OnEnterEsn)
+	ON_BN_CLICKED(IDC_ENTER_IMEI, OnEnterImei)
 	ON_WM_KILLFOCUS()
 	ON_WM_PAINT()
 	ON_WM_TIMER()
-	ON_BN_CLICKED(IDC_ENTER_IMEI, OnEnterImei)
+	ON_EN_CHANGE(IDC_EDIT_IMEI2, OnChangeEditImei2)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(DM_GETDEFID, OnGetDefID)
 END_MESSAGE_MAP()
@@ -125,6 +130,10 @@ void COTPPancel::OnChangeEditImei()
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
 	strcpy(gIMEI.szIMEI,m_IMEI.GetBuffer(0));
+	if (14 == m_IMEI.GetLength())
+	{
+		GetNextDlgTabItem(GetFocus())->SetFocus();
+	}
 }
 
 void COTPPancel::OnChangeEditBtAddress() 
@@ -348,6 +357,7 @@ BOOL COTPPancel::OnInitDialog()
 void COTPPancel::RefreshPancel()
 {
 	m_IMEI = CString(gIMEI.szIMEI);
+	m_IMEI2 = CString(gIMEI2.szIMEI2);
 	m_BTAddress = CString(gBTAddress.szBlueToothAddr);
 	m_DCK = CString(gDCK);
 	m_ESN = CString(gESN.szESN);
@@ -643,7 +653,7 @@ void COTPPancel::OnEnterImei()
 	// TODO: Add your control notification handler code here
 	RefreshMainDlgMsgBox("");	// clear main dialog msg box
 	UpdateData(TRUE);
-	if(m_IMEI.GetLength()==14 && allowEnter==TRUE)
+	if(m_IMEI.GetLength()==14 && m_IMEI2.GetLength()==14  && allowEnter==TRUE)
 	{
 		//允许客户反复快速多次写
 		//if (0 == strcmp(lastMEID,(LPCTSTR)m_MEID))
@@ -659,9 +669,11 @@ void COTPPancel::OnEnterImei()
 		
 		strcpy(lastIMEI,(LPCTSTR)m_IMEI);
 		strcpy(gIMEI.szIMEI,(LPCTSTR)m_IMEI);
+		strcpy(gIMEI2.szIMEI2,(LPCTSTR)m_IMEI2);
 		NotifyMainDlgOnWrite();
 		
 		m_IMEI.Empty();
+		m_IMEI2.Empty();
 		UpdateData(FALSE);
 		
 		//allowEnter = FALSE;	//允许客户反复快速多次写
@@ -671,6 +683,7 @@ void COTPPancel::OnEnterImei()
 	else
 	{
 		m_IMEI.Empty();
+		m_IMEI2.Empty();
 		UpdateData(FALSE);
 		if (allowEnter == FALSE)
 		{
@@ -680,5 +693,21 @@ void COTPPancel::OnEnterImei()
 		{
 			RefreshMainDlgMsgBox("请检查IMEI是否为14位！");
 		}
+	}
+}
+
+void COTPPancel::OnChangeEditImei2() 
+{
+	// TODO: If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialog::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+	
+	// TODO: Add your control notification handler code here
+	UpdateData(TRUE);
+	strcpy(gIMEI2.szIMEI2,m_IMEI2.GetBuffer(0));
+	if (14 == m_IMEI2.GetLength())
+	{
+		GetNextDlgTabItem(GetFocus())->SetFocus();
 	}
 }

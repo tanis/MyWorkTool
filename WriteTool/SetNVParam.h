@@ -61,6 +61,48 @@ Revision 1.1.1.1  2007/03/14 07:26:48  zhangjj
 #define GOZONE_OTP_EXTERN_ITEM	0x7fff
 typedef enum
 {
+#if 1
+	GOZONE_VERSION,				/* 软件版本号的查询 */
+	GOZONE_NV_BACKUP,				/* NV的备份 */
+	GOZONE_NV_RESTORE,			/* NV的恢复*/
+	GOZONE_IMEI_READ,				/* IMEI号的读取 */
+	GOZONE_IMEI_WRITE,			/* IMEI号的写入 */
+	GOZONE_BTADD_READ,			/* 蓝牙地址的读取 */
+	GOZONE_BTADD_WRITE,			/* 蓝牙地址的写入*/
+	GOZONE_DCK_READ,				/* DCK数据的读取 */
+	GOZONE_DCK_WRITE,				/* DCK数据的写入 */
+	GOZONE_PLMN_READ,				/* PLMN数据的读取 */
+	GOZONE_PLMN_WRITE,			/* PLMN数据的写入 */
+	GOZONE_NCK_READ,				/* simlock info 的读取*/
+	GOZONE_NCK_WRITE,				/* simlock info 的写入 */
+	GOZONE_NV_IMPORT,				/* NV的导入 */
+	GOZONE_NV_EXPORT,				/* NV的导出 */
+	GOZONE_OTP_LOCK,				/* 锁定OTP数据 */
+	GOZONE_USIM_SWITCH,			/* 修改Usim Switch 的状态 */
+	GOZONE_ENGINEERING_SWITCH, 	/* 修改Engineering Switch 的状态 */
+	GOZONE_BLUETOOTH_CHECKOUT,	/* 修改Bluetooth Checkout 的状态 */
+	GOZONE_NV_CHECKOUT,			/* 修改NV Checkout 的状态 */
+	GOZONE_PUBLICKEY_READ,		/* Public key 的读取 */
+	GOZONE_PUBLICKEY_WRITE,		/* Public key 的写入 */
+	GOZONE_ORIUNDERWRITEDATA,		/* 读取需要签名的原始数据 */
+	GOZONE_UNDERWRITEDATA_READ,	/* Underwrite data 的读取*/
+	GOZONE_UNDERWRITEDATA_WRITE,	/* Underwrite data 的写入*/
+	GOZONE_WRITINGREQUEST,		/* 向手机端发送写请求, 允许之后才能将数据写入Flash */
+	GOZONE_ERASUREOTP,
+	#if 0
+	GOZONE_ERASURE_OTP,			/* 擦除OTP数据 */
+	#endif
+	GOZONE_PHONEID_READ,			/* 签名数据的安全码的读取 */
+	GOZONE_PHONEID_WRITE,			/* 签名数据的安全码的写入 */
+	GOZONE_IMEI2_READ,				/* IMEI2号的读取 */
+	GOZONE_IMEI2_WRITE,				/* IMEI2号的写入 */
+	#if 1
+	GOZONE_ESN_READ, 				/* ESN号的读取 zhangjj 071108 */
+	GOZONE_ESN_WRITE,				/* ESN号的写入 zhangjj 071108 */
+	GOZONE_MEID_READ,				/* MEID的读取 */
+	GOZONE_MEID_WRITE,				/* MEID的写入 */
+	#endif
+#else
 	GOZONE_VERSION,					/* 软件版本号的查询 */
 	GOZONE_NV_BACKUP,				/* NV的备份 */
 	GOZONE_NV_RESTORE,				/* NV的恢复*/
@@ -94,6 +136,9 @@ typedef enum
 	GOZONE_ESN_WRITE,				/* ESN号的写入 zhangjj 071108 */
 	GOZONE_MEID_READ,				/* MEID的读取 */
 	GOZONE_MEID_WRITE,				/* MEID的写入 */
+	GOZONE_IMEI2_READ,				/* IMEI2号的读取 */
+	GOZONE_IMEI2_WRITE,				/* IMEI2号的写入 */
+#endif
 }ENUM_Gozone_NVOptionType;
 
 /*===========================================================================
@@ -208,6 +253,9 @@ public:
 
     BOOL Read_OTP_IMEI(OTP_IMEI *pOTPImei);
 	BOOL Write_OTP_IMEI(OTP_IMEI *pOTPImei);
+
+    BOOL Read_OTP_IMEI2(OTP_IMEI2 *pOTPImei);
+	BOOL Write_OTP_IMEI2(OTP_IMEI2 *pOTPImei);
 
     BOOL Read_OTP_BlueToothAddr(OTP_BlueToothAddr *pOTPBluetoothaddr);
 	BOOL Write_OTP_BlueToothAddr(OTP_BlueToothAddr *pOTPBluetoothaddr);

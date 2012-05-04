@@ -154,6 +154,23 @@ BOOL Write_OTP_IMEI(UINT nSerialPort, OTP_IMEI *pOTPImei)
     return TRUE;
 }
 
+BOOL Write_OTP_IMEI2(UINT nSerialPort, OTP_IMEI2 *pOTPImei)
+{
+	if(pOTPImei == NULL)
+	{
+		return FALSE;
+	}
+    int nIndex = GetQueue(nSerialPort);
+    if (-1 == nIndex)
+        return FALSE;
+	
+    if (!SetNVParam[nIndex].Write_OTP_IMEI2(pOTPImei))
+        return FALSE;
+    
+    return TRUE;
+}
+
+
 // opt_bluetoothaddr
 BOOL Read_OTP_BlueToothAddr(UINT nSerialPort, OTP_BlueToothAddr *pOTPBluetoothaddr)
 {
